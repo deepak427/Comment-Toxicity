@@ -38,11 +38,10 @@ test = dataset.skip(int(len(dataset)*.9)).take(int(len(dataset)*.1))
 # Create Sequential Model
 
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import LSTM, Dropout, Bidirectional, Dense, Embedding
-
+from tensorflow.keras.layers import LSTM, Bidirectional, Dense, Embedding
 
 model = Sequential()
-# Create the embedding layer 
+# Create the embedding layer
 model.add(Embedding(MAX_FEATURES+1, 32))
 # Bidirectional LSTM Layer
 model.add(Bidirectional(LSTM(32, activation='tanh')))
