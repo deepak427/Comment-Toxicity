@@ -62,3 +62,29 @@ from matplotlib import pyplot as plt
 plt.figure(figsize=(8,5))
 pd.DataFrame(history.history).plot()
 plt.show()
+
+# Make Predictions
+
+batch_X, batch_y = test.as_numpy_iterator().next()
+(model.predict(batch_X) > 0.5).astype(int)
+
+# Evaluate Model
+
+from tensorflow.keras.metrics import Precision, Recall, CategoricalAccuracy
+pre = Precision()
+re = Recall()
+acc = CategoricalAccuracy()
+for batch in test.as_numpy_iterator(): 
+    # Unpack the batch 
+    X_true, y_true = batch
+    # Make a prediction 
+    yhat = model.predict(X_true)
+    
+    # Flatten the predictions
+    y_true = y_true.flatten()
+    yhat = yhat.flatten()
+    
+    pre.update_state(y_true, yhat)
+    re.update_state(y_true, yhat)
+    acc.update_state(y_true, yhat)
+print(f'Precision: {pre.result().numpy()}, Recall:{re.result().numpy()}, Accuracy:{acc.result().numpy()}')
